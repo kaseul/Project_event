@@ -1,18 +1,21 @@
-<%@page import="java.util.List"%>
-<%@page import="mirim.hs.kr.ProductBean"%>
+<%@page import="mirim.hs.kr.NoteBean"%>
 <%@page import="mirim.hs.kr.LogonDBBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
-	String id = (String)session.getAttribute("id");
+	request.setCharacterEncoding("UTF-8");
+	int nno = Integer.parseInt(request.getParameter("nno"));
 	LogonDBBean db = LogonDBBean.getInstance();
-	List<ProductBean> products = db.selectProductWithId(id);
+	
+	String id = (String)session.getAttribute("id");
 	
 	if(id != null) {
-		request.setAttribute("products", products);
+		request.setAttribute("products", db.selectProductWithId(id));
 	}
+	NoteBean note = db.selectNote(nno);
+	request.setAttribute("note", note);
 %>
 <!DOCTYPE html>
 <html>
@@ -26,15 +29,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.10.1/js/all.js"></script>
 <script>
-function selectText() {
-    var selectionText = "";
-    if (document.getSelection) {
-        selectionText = document.getSelection();
-    } else if (document.selection) {
-        selectionText = document.selection.createRange().text;
-    }
-    console.log(selectionText);
-}
 function submit_div() {
 	if(document.getElementById('contentDiv').innerHTML.trim() == "") {
 		alert("내용을 입력해주세요!");
@@ -49,9 +43,10 @@ function submit_div() {
 </head>
 <body>
 	<div class="container" style="padding-top: 20px;">
-		<form id="insertNoteForm" action="insertNoteProc.jsp" method="post">
+		<form id="updateNoteForm" action="updateNoteProc.jsp" method="post">
 			제목
-			<input type="text" class="form-control" name="title" maxlength="50" required><p>
+			<input type="text" class="form-control" name="title" value="${note.title}" maxlength="50" required><p>
+			<input type="hidden" id="nno" name="nno" value="${note.nno}" required>
 			<input type="hidden" id="content" name="content" required>
 			<input type="hidden" name="id" value="${id}" required>
 			<ul class="nav nav-tabs nav-justified">
@@ -126,9 +121,11 @@ function submit_div() {
 		    	</li>
 			</ul>
 			<div id="contentDiv" class="card" contenteditable="true" style="border-top: none; border-top-left-radius: 0px 0px; border-top-right-radius: 0px 0px; min-height: 200px;">
+			${note.content}
 			</div>
 			<center>
-				<button type="button" class="btn btn-dark" onclick="submit_div()" style="margin: 20px;">저장</button>
+				<button type="button" class="btn btn-dark" onclick="submit_div()" style="margin: 20px 5px;">저장</button>
+				<button type="button" class="btn btn-dark" onclick="history.go(-1);" style="margin: 20px 5px;">취소</button>
 				<input type="submit" id="submitButton" style="visibility: hidden;">
 			</center>
 		</form>

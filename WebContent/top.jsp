@@ -1,7 +1,19 @@
+<%@page import="mirim.hs.kr.UserBean"%>
+<%@page import="mirim.hs.kr.LogonDBBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+	LogonDBBean db = LogonDBBean.getInstance();
+	String id = (String) session.getAttribute("id");
+	UserBean user = null;
+	
+	if(id != null) {
+		user = db.getUser(id);
+	}
+	request.setAttribute("user", user);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,21 +40,18 @@
 		</c:when>
 		<c:when test="${id == 'admin'}">
 		    <li class="nav-item">
-		      <a class="nav-link" href="insertMenu.jsp">급식 등록</a>
-		    </li>
-  			<li class="nav-item">
-		      <a class="nav-link" href="graph.jsp">메뉴 통계</a>
-		    </li>
-		    <li class="nav-item">
-		      <a class="nav-link" href="board.jsp">급식 의견</a>
+		      <a class="nav-link" href="insertOption.jsp">옵션 등록</a>
 		    </li>
   		</c:when>
   		<c:otherwise>
+  			<li class="nav-item">
+		      <a class="nav-link" href="viewNote.jsp">노트 보기</a>
+		    </li>
 		    <li class="nav-item">
 		      <a class="nav-link" href="insertNote.jsp">노트 작성</a>
 		    </li>
 		    <li class="nav-item">
-		      <a class="nav-link" href="likes.jsp">즐겨찾기</a>
+		      <a class="nav-link" href="buyOption.jsp">옵션 구매</a>
 		    </li>
   		</c:otherwise>
 	</c:choose>
@@ -53,6 +62,9 @@
 	    	<li class="nav-item">
 				<span class="navbar-text">
 					${id}님
+					<span class="badge badge-light">
+						<i class="fas fa-star"></i>${user.point}
+					</span>
 				</span>
 			</li>
 			<li class="nav-item">

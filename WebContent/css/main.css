@@ -6,6 +6,12 @@
 ::-webkit-scrollbar-thumb {background-color:#dfdfdf; border-radius: 10px;}
 
 * {
-    font-family: 'Noto Sans KR';
+    /* font-family: 'Noto Sans KR'; */
     color: #263646;
+}
+
+.full {
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0);
 }
