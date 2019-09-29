@@ -9,6 +9,7 @@ public class UserBean {
 	private int point;
 	private Timestamp regDate;
 	private Timestamp eventDate;
+	private Timestamp login;
 	
 	public String getId() {
 		return id;
@@ -46,11 +47,17 @@ public class UserBean {
 	public void setEventDate(Timestamp eventDate) {
 		this.eventDate = eventDate;
 	}
+	public Timestamp getLogin() {
+		return login;
+	}
+	public void setLogin(Timestamp login) {
+		this.login = login;
+	}
 	
 	@Override
 	public String toString() {
 		return "UserBean [id=" + id + ", pw=" + pw + ", name=" + name + ", point=" + point + ", regDate=" + regDate
-				+ ", eventDate=" + eventDate + "]";
+				+ ", eventDate=" + eventDate + ", login=" + login + "]";
 	}
 	
 }

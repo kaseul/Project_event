@@ -29,24 +29,26 @@
 	// System.out.println(lots[0] + " " + lots[1] + " " + lots[2]);
 	
 	String id = (String) session.getAttribute("id");
-	if(id != null || !id.equals("admin")) {
-		user = db.getUser(id);
-		regDate = user.getRegDate();
-		eventDate = user.getEventDate();
-		
-		Calendar eventCalendar = Calendar.getInstance();
-		eventCalendar.setTime(new SimpleDateFormat("yyyyMMdd").parse(new SimpleDateFormat("yyyyMMdd").format(eventDate)));
-		
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new SimpleDateFormat("yyyyMMdd").parse(new SimpleDateFormat("yyyyMMdd").format(new Date(System.currentTimeMillis()))));
-		
-		System.out.println("Main eventCalendar : " + eventCalendar.get(Calendar.YEAR) + "/" + eventCalendar.get(Calendar.MONTH) + "/" + eventCalendar.get(Calendar.DATE) + " " + eventCalendar.get(Calendar.HOUR) + ":" + eventCalendar.get(Calendar.MINUTE) + ":" + eventCalendar.get(Calendar.SECOND));
-		System.out.println("Main todayCalendar : " + calendar.get(Calendar.YEAR) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
-		System.out.println(calendar.compareTo(eventCalendar));
-		//out.println(regDate + " " + eventDate + " " + today);
-		
-		if((regDate.compareTo(eventDate) == 0) || calendar.compareTo(eventCalendar) > 0) {
-			check = 1;
+	if(id != null) {
+		if(!id.equals("admin")) {
+			user = db.getUser(id);
+			regDate = user.getRegDate();
+			eventDate = user.getEventDate();
+			
+			Calendar eventCalendar = Calendar.getInstance();
+			eventCalendar.setTime(new SimpleDateFormat("yyyyMMdd").parse(new SimpleDateFormat("yyyyMMdd").format(eventDate)));
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(new SimpleDateFormat("yyyyMMdd").parse(new SimpleDateFormat("yyyyMMdd").format(new Date(System.currentTimeMillis()))));
+			
+			System.out.println("Main eventCalendar : " + eventCalendar.get(Calendar.YEAR) + "/" + eventCalendar.get(Calendar.MONTH) + "/" + eventCalendar.get(Calendar.DATE) + " " + eventCalendar.get(Calendar.HOUR) + ":" + eventCalendar.get(Calendar.MINUTE) + ":" + eventCalendar.get(Calendar.SECOND));
+			System.out.println("Main todayCalendar : " + calendar.get(Calendar.YEAR) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
+			System.out.println(calendar.compareTo(eventCalendar));
+			//out.println(regDate + " " + eventDate + " " + today);
+			
+			if((regDate.compareTo(eventDate) == 0) || calendar.compareTo(eventCalendar) > 0) {
+				check = 1;
+			}
 		}
 	}
 	

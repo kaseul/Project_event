@@ -13,6 +13,7 @@
 	
 	if(id != null) {
 		request.setAttribute("products", db.selectProductWithId(id));
+		request.setAttribute("schedules", db.selectScheduleWithId(id));
 	}
 	NoteBean note = db.selectNote(nno);
 	request.setAttribute("note", note);
@@ -33,7 +34,7 @@ function submit_div() {
 	if(document.getElementById('contentDiv').innerHTML.trim() == "") {
 		alert("내용을 입력해주세요!");
 	}
-	else{
+	else {
 		document.getElementById('content').value = document.getElementById('contentDiv').innerHTML.trim();
 		//alert(document.getElementById('content').value);
 		document.getElementById('submitButton').click();
@@ -44,8 +45,34 @@ function submit_div() {
 <body>
 	<div class="container" style="padding-top: 20px;">
 		<form id="updateNoteForm" action="updateNoteProc.jsp" method="post">
-			제목
-			<input type="text" class="form-control" name="title" value="${note.title}" maxlength="50" required><p>
+			<div class="form-inline">
+				제목 : &nbsp;<input type="text" class="form-control col-11" name="title" value="${note.title}" maxlength="50" required><p>
+			</div>
+			<p>
+			<div class="form-inline">
+				<label for="sno">관련 일정 : &nbsp;</label>
+				<select class="form-control col-11" name="sno" required>
+					<c:choose>
+						<c:when test="${note.sno == 0}">
+							<option value='0' selected>없음</option>
+						</c:when>
+						<c:otherwise>
+							<option value='0'>없음</option>
+						</c:otherwise>
+					</c:choose>
+					<c:forEach var="schedule" items="${schedules}">
+						<c:choose>
+							<c:when test="${note.sno == schedule.sno}">
+								<option value='<f:formatNumber value="${schedule.sno}"></f:formatNumber>' selected>${schedule.title}</option>
+							</c:when>
+							<c:otherwise>
+								<option value='<f:formatNumber value="${schedule.sno}"></f:formatNumber>'>${schedule.title}</option>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+				</select>
+			</div>
+			<p>
 			<input type="hidden" id="nno" name="nno" value="${note.nno}" required>
 			<input type="hidden" id="content" name="content" required>
 			<input type="hidden" name="id" value="${id}" required>

@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public class NoteBean {
 	private int nno;
+	private int sno;
 	private String id;
 	private String title;
 	private String content;
@@ -15,6 +16,12 @@ public class NoteBean {
 	}
 	public void setNno(int nno) {
 		this.nno = nno;
+	}
+	public int getSno() {
+		return sno;
+	}
+	public void setSno(int sno) {
+		this.sno = sno;
 	}
 	public String getId() {
 		return id;

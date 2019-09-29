@@ -12,6 +12,7 @@
 	
 	if(id != null) {
 		request.setAttribute("products", products);
+		request.setAttribute("schedules", db.selectScheduleWithId(id));
 	}
 %>
 <!DOCTYPE html>
@@ -48,10 +49,23 @@ function submit_div() {
 </script>
 </head>
 <body>
-	<div class="container" style="padding-top: 20px;">
+	<div class="container" style="padding: 50px 0px;">
+		<h3 style="text-align: center; margin-bottom: 20px;">노트 등록</h3>
 		<form id="insertNoteForm" action="insertNoteProc.jsp" method="post">
-			제목
-			<input type="text" class="form-control" name="title" maxlength="50" required><p>
+			<div class="form-inline">
+				제목 : &nbsp;<input type="text" class="form-control col-11" name="title" maxlength="50" required><p>
+			</div>
+			<p>
+			<div class="form-inline">
+				<label for="sno">관련 일정 : &nbsp;</label>
+				<select class="form-control col-11" name="sno" required>
+					<option value='0'>없음</option>
+					<c:forEach var="schedule" items="${schedules}">
+						<option value='<f:formatNumber value="${schedule.sno}"></f:formatNumber>'>${schedule.title}</option>
+					</c:forEach>
+				</select>
+			</div>
+			<p>
 			<input type="hidden" id="content" name="content" required>
 			<input type="hidden" name="id" value="${id}" required>
 			<ul class="nav nav-tabs nav-justified">

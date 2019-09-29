@@ -26,11 +26,11 @@
 		    <input type="text" class="form-control" id="pname" name="pname" maxlength="30" required>
 		</div>
 		<div class="form-group">
-		    <label for="ptype">옵션 값 :</label>
+		    <label for="pvalue">옵션 값 :</label>
 		    <input type="text" class="form-control" id="pvalue" name="pvalue" maxlength="30" required>
 		</div>
 		<div class="form-group">
-		    <label for="ptype">옵션 종류 :</label>
+		    <label for="point">포인트 :</label>
 		    <input type="number" class="form-control" id="point" name="point" min="5" max="50" required>
 		</div>
 		<center>
