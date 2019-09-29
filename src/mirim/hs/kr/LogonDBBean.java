@@ -32,7 +32,7 @@ public class LogonDBBean {
 		PreparedStatement pstmt = null;
 		try {
 			conn = getConnection();
-			String sql = "INSERT INTO userTbl(id, pw, name, regDate, eventDate, login) VALUES(?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO userTbl(id, pw, name, regDate, eventDate, login) VALUES(?, ?, ?, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, user.getId());
 			pstmt.setString(2, user.getPw());
@@ -755,7 +755,7 @@ public class LogonDBBean {
 		return issues;
 	} // selectScheduleWithId
 	
-	// Dashboard용
+	// Dashboard�슜
 	public List<ScheduleBean> selectScheduleForDashBoard(String id, Timestamp login, Timestamp now) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
