@@ -23,25 +23,35 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.10.1/js/all.js"></script>
 <script>
-	function buy(pno, point) {
-		if(confirm('이 옵션을 구매하시겠습니까?')) {
+	function buyPoint(pno, point) {
+		if(confirm('이 옵션을 포인트로 구매하시겠습니까?')) {
 			document.getElementById('pno').value = pno;
 			document.getElementById('point').value = point;
 			document.getElementById('optionForm').submit();
 		}
 	}
+	function buy(pno) {
+		if(confirm('이 옵션을 구매하시겠습니까?')) {
+			document.getElementById('pno').value = pno;
+		}
+	}
 </script>
 </head>
 <body>
+<h3 style="text-align: center; margin-top: 50px;">옵션</h3>
 <div class="container">
+	<hr>
 	<div class="row">
 		<c:forEach items="${products}" var="product">
 			<div class="col-4" style="margin-top: 30px;">
 				<div class="card">
 					<div class="card-body">
 						<h4 class="card-title">${product.ptype} - ${product.pname}</h4>
-						<p class="card-text" style="text-align: right"><i class="fas fa-star"></i>&nbsp;${product.point}</p>
-						<button class="btn btn-dark" onclick="buy('${product.pno}', '${product.point}')">구매하기</button>
+						<p class="card-text">
+							<div style="background-color: ${product.pvalue}">예시입니다.</div>
+						</p>
+						<button class="btn btn-dark" onclick="buyPoint('${product.pno}', '${product.point}')"><i class="fas fa-star"></i>&nbsp;${product.point}</button>
+						<button class="btn btn-dark" onclick="buy('${product.pno}')">구매하기</button>
 				    </div>
 				</div>
 			</div>

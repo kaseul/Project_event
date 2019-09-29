@@ -37,7 +37,7 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-	<div class="container" style="margin: 50px 0px 30px;">
+	<div class="container" style="padding: 50px 0px 30px;">
 		<div class="row">
 			<div class="col-4">
 				<div class="card" style="height: 100%;">
@@ -56,7 +56,7 @@ $(document).ready(function(){
 								    		새로운 일정이 등록되었습니다!
 								    	</c:when>
 								    	<c:otherwise>
-								    		일정이 수정되었습니다.
+								    		일정이 수정되었습니다!
 								    	</c:otherwise>
 								    </c:choose>
 								    <br>
@@ -84,7 +84,7 @@ $(document).ready(function(){
 								    		새로운 노트가 등록되었습니다!
 								    	</c:when>
 								    	<c:otherwise>
-								    		노트가 수정되었습니다.
+								    		노트가 수정되었습니다!
 								    	</c:otherwise>
 								    </c:choose>
 								    <br>
@@ -100,23 +100,26 @@ $(document).ready(function(){
 					<div class="card-body">
 						<h5 class="card-title">이슈</h5>
 						<c:forEach items="${issues}" var="issue">
-							<div class="toast" data-autohide="false">
-								<div class="toast-header">
-								    <strong class="mr-auto text-primary">${issue.id}</strong>
-								    <small class="text-muted"><f:formatDate value="${issue.regDay}" pattern="yyyy-MM-dd HH:mm:ss"/> </small>
-								    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+							<c:if test="${issue.id != id}">
+								<div class="toast" data-autohide="false">
+									<div class="toast-header">
+									    <strong class="mr-auto text-primary">${issue.id}</strong>
+									    <small class="text-muted"><f:formatDate value="${issue.regDay}" pattern="yyyy-MM-dd HH:mm:ss"/> </small>
+									    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+									</div>
+									<div class="toast-body">
+									    새로운 이슈가 등록되었습니다!
+									    <br>
+									    <button class="btn btn-light btn-block" onclick="location.href='viewNoteDetail.jsp?nno=${issue.nno}'">이슈 보기</button>
+									</div>
 								</div>
-								<div class="toast-body">
-								    새로운 이슈가 등록되었습니다!
-								    <br>
-								    <button class="btn btn-light btn-block" onclick="location.href='viewNoteDetail.jsp?nno=${issue.nno}'">이슈 보기</button>
-								</div>
-							</div>
+							</c:if>
 						</c:forEach>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	
 </body>
 </html>

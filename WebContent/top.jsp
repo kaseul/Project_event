@@ -45,6 +45,9 @@
   		</c:when>
   		<c:otherwise>
   			<li class="nav-item">
+		      <a class="nav-link" href="viewDashboard.jsp">대시보드</a>
+		    </li>
+  			<li class="nav-item">
 		      <a class="nav-link" href="viewCalendar.jsp">일정 보기</a>
 		    </li>
   			<li class="nav-item">
@@ -55,9 +58,6 @@
 		    </li>
 		    <li class="nav-item">
 		      <a class="nav-link" href="buyOption.jsp">옵션 구매</a>
-		    </li>
-		    <li class="nav-item">
-		      <a class="nav-link" href="board.jsp">건의사항</a>
 		    </li>
   		</c:otherwise>
 	</c:choose>
