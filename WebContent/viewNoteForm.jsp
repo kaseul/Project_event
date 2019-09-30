@@ -12,10 +12,15 @@
 	List<NoteBean> notes = null;
 	String id = (String)session.getAttribute("id");
 	String sSno = request.getParameter("sno");
+	String title = request.getParameter("title");
 	
 	if(id != null) {
-		if(sSno == null) {
+		if(sSno == null && title == null) {
 			notes = db.selectNotesWithId(id);
+			request.setAttribute("schedules", db.selectScheduleWithId(id));
+		}
+		else if(sSno == null) {
+			notes = db.selectNotesWithTitle(id, title);
 			request.setAttribute("schedules", db.selectScheduleWithId(id));
 		}
 		else {
@@ -26,6 +31,7 @@
 	
 	request.setAttribute("notes", notes);
 	request.setAttribute("sno", sSno);
+	request.setAttribute("title", title);
 %>
 <!DOCTYPE html>
 <html>
@@ -42,7 +48,22 @@
 <body>
 <c:choose>
 	<c:when test="${empty sno}">
-		<h3 style="text-align: center; margin-top: 50px;">전체 노트</h3>
+		<div class="container" style="padding: 20px 0px;">
+			<form action="viewNote.jsp">
+				<div class="form-inline">
+					<input type="text" class="form-control col-10" name="title">
+					<button class="btn btn-dark col-2">검색</button>
+				</div>
+			</form>
+		</div>
+		<c:choose>
+			<c:when test="${empty title}">
+				<h3 style="text-align: center; margin-top: 50px;">전체 노트</h3>
+			</c:when>
+			<c:otherwise>
+				<h3 style="text-align: center; margin-top: 50px;">'${title}' 관련 노트</h3>
+			</c:otherwise>
+		</c:choose>
 	</c:when>
 	<c:otherwise>
 		<h3 style="text-align: center; margin-top: 50px;">'${rSchedule.title}' 관련 노트</h3>

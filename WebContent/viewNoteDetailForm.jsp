@@ -68,7 +68,7 @@ $(document).ready(function(){
 			    <hr>
 			    <button class="btn btn-dark" onclick="history.go(-1)">뒤로가기</button>
 			    <button class="btn btn-dark" onclick="location.href='updateNote.jsp?nno=${note.nno}'">수정</button>
-			    <button class="btn btn-light" onclick="copy('http://localhost:8088/Project_event/viewNoteDetail.jsp?nno=${note.nno}')" data-toggle="popover" data-trigger="focus" data-content="Copied!"><i class="fas fa-link"></i>링크</button>
+			    <button class="btn btn-light" onclick="copy('http://10.96.124.182:8088/Project_event/viewNoteDetail.jsp?nno=${note.nno}')" data-toggle="popover" data-trigger="focus" data-content="Copied!"><i class="fas fa-link"></i>링크</button>
 			    <button class="btn btn-light" onclick="location.href='downloadNoteHWP.jsp?nno=${note.nno}'"><i class="fas fa-file-download"></i>&nbsp;.hwp</button>
 			    <button class="btn btn-light" onclick="location.href='downloadNoteWord.jsp?nno=${note.nno}'"><i class="fas fa-file-download"></i>&nbsp;.doc</button>
   			</div>

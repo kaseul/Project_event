@@ -1,6 +1,3 @@
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.sql.Timestamp"%>
-<%@page import="mirim.hs.kr.ScheduleBean"%>
 <%@page import="mirim.hs.kr.LogonDBBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -9,20 +6,11 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	LogonDBBean db = LogonDBBean.getInstance();
-	ScheduleBean schedule = new ScheduleBean();
-	schedule.setSno(Integer.parseInt(request.getParameter("sno")));
-	schedule.setId((String) session.getAttribute("id"));
-	schedule.setTitle(request.getParameter("title"));
-	schedule.setContent(request.getParameter("content"));
-	schedule.setStartDay(Timestamp.valueOf(request.getParameter("startDay").replace("T", " ") + ":00"));
-	schedule.setEndDay(Timestamp.valueOf(request.getParameter("endDay").replace("T", " ") + ":00"));
-	schedule.setTeam(request.getParameter("team"));
-	
-	db.updateSchedule(schedule);
-	
-	System.out.println("updateCalendarProc : " + schedule);
-	
-	
+%>
+<jsp:useBean id="product" class="mirim.hs.kr.ProductBean"/>
+<jsp:setProperty property="*" name="product"/>
+<%
+	db.updateProduct(product);
 %>
 <!DOCTYPE html>
 <html>
@@ -36,10 +24,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.10.1/js/all.js"></script>
 <script>
-	window.onload = function() {
-		alert('일정을 수정하였습니다!');
-		location.href='viewCalendar.jsp';
-	}
+	alert('옵션을 수정하였습니다!');
+	location.href="buyOption.jsp";
 </script>
 </head>
 <body>

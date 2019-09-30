@@ -27,7 +27,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
-	<a class="navbar-brand" href="index.jsp">Logo</a>
+	<a class="navbar-brand" href="index.jsp">Note</a>
 	<ul class="navbar-nav">
 	<c:choose>
 		<c:when test="${empty id}">
@@ -39,6 +39,15 @@
 		    </li>
 		</c:when>
 		<c:when test="${id == 'admin'}">
+			<li class="nav-item">
+		      <a class="nav-link" href="viewUsers.jsp">회원 목록</a>
+		    </li>
+			<li class="nav-item">
+		      <a class="nav-link" href="viewBuy.jsp">옵션 구매 목록</a>
+		    </li>
+		    <li class="nav-item">
+		      <a class="nav-link" href="buyOption.jsp">옵션 목록</a>
+		    </li>
 		    <li class="nav-item">
 		      <a class="nav-link" href="insertOption.jsp">옵션 등록</a>
 		    </li>
@@ -68,9 +77,11 @@
 	    	<li class="nav-item">
 				<span class="navbar-text">
 					${id}님
-					<span class="badge badge-light">
-						<i class="fas fa-star"></i>${user.point}
-					</span>
+					<c:if test="${id != 'admin'}">
+						<span class="badge badge-light">
+							<i class="fas fa-star"></i>${user.point}
+						</span>
+					</c:if>
 				</span>
 			</li>
 			<li class="nav-item">

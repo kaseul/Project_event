@@ -30,15 +30,15 @@
 			document.getElementById('optionForm').submit();
 		}
 	}
-	function buy(pno) {
+	function buy(pno, ptype, pname, point) {
 		if(confirm('이 옵션을 구매하시겠습니까?')) {
-			document.getElementById('pno').value = pno;
+			//window.open("buyCreditForm.jsp?pno=" + pno + "&ptype=" + ptype + "&pname=" + pname + "&point=" + point, "결제", "width=600, height=500, toolbar=no, menubar=no, scrollbars=no, resizable=yes");  
 		}
 	}
 </script>
 </head>
 <body>
-<h3 style="text-align: center; margin-top: 50px;">옵션</h3>
+<h3 style="text-align: center; margin-top: 50px;">노트 Editor 옵션</h3>
 <div class="container">
 	<hr>
 	<div class="row">
@@ -48,10 +48,20 @@
 					<div class="card-body">
 						<h4 class="card-title">${product.ptype} - ${product.pname}</h4>
 						<p class="card-text">
-							<div style="background-color: ${product.pvalue}">예시입니다.</div>
-						</p>
-						<button class="btn btn-dark" onclick="buyPoint('${product.pno}', '${product.point}')"><i class="fas fa-star"></i>&nbsp;${product.point}</button>
-						<button class="btn btn-dark" onclick="buy('${product.pno}')">구매하기</button>
+						<a href="#option${product.pno}" class="btn btn-light btn-block" data-toggle="collapse">예시 보기</a>
+						<div id="option${product.pno}" class="collapse" style="padding-bottom: 10px;">
+							<div contenteditable="true">글자를 드래그하고 버튼을 눌러보세요!</div>
+							<button class="btn btn-primary btn-block" onclick="document.execCommand('${product.ptype}', 'fasle', '${product.pvalue}');">적용</button>
+						</div>
+						<c:choose>
+							<c:when test="${id != 'admin'}">
+								<button class="btn btn-dark col-5" onclick="buyPoint('${product.pno}', '${product.point}')"><i class="fas fa-star"></i>&nbsp;${product.point}</button>
+								<button class="btn btn-dark col-5" style="float: right;" onclick="buy('${product.pno}', '${product.point}')"><i class="fas fa-credit-card"></i>&nbsp;${product.point}</button>
+							</c:when>
+							<c:otherwise>
+								<button class="btn btn-dark btn-block" onclick="location.href='updateOption.jsp?pno=${product.pno}'">옵션 수정하기</button>
+							</c:otherwise>
+						</c:choose>
 				    </div>
 				</div>
 			</div>

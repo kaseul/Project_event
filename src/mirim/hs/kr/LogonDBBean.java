@@ -27,9 +27,11 @@ public class LogonDBBean {
 		return conn;
 	} // getConnection
 	
-	public void insertUser(UserBean user) throws Exception {
+	public int insertUser(UserBean user) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
+		int result = 1;
+		
 		try {
 			conn = getConnection();
 			String sql = "INSERT INTO userTbl(id, pw, name, regDate, eventDate, login) VALUES(?, ?, ?, ?, ?, ?)";
@@ -45,12 +47,14 @@ public class LogonDBBean {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+			result = 0;
 		}
 		finally {
 			if(pstmt != null) { try { pstmt.close(); } catch(Exception e) {} }
 			if(conn != null) { try { conn.close(); } catch(Exception e) {} } 
 		} // finally
 		
+		return result;
 	} // insertUser
 	
 	public void updateUser(String id, int point) throws Exception {
@@ -337,6 +341,47 @@ public class LogonDBBean {
 		return notes;
 	} // selectNotesWithId
 	
+	public List<NoteBean> selectNotesWithTitle(String id, String title) throws Exception {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<NoteBean> notes = new ArrayList<>();
+		
+		try {
+			conn = getConnection();
+			String sql = "SELECT * FROM noteTbl WHERE (id = ? || sno IN (SELECT sno FROM scheduleTbl WHERE team LIKE ?)) && title LIKE ? ORDER BY regDate DESC";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, "%" + id + "%");
+			pstmt.setString(3, "%" + title + "%");
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				NoteBean note = new NoteBean();
+				note.setNno(rs.getInt("nno"));
+				note.setSno(rs.getInt("sno"));
+				note.setId(rs.getString("id"));
+				note.setTitle(rs.getString("title"));
+				note.setContent(rs.getString("content"));
+				note.setRegDate(rs.getTimestamp("regDate"));
+				note.setUpdateDate(rs.getTimestamp("updateDate"));
+				
+				notes.add(note);
+			} // while
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(rs != null) { try { rs.close(); } catch(Exception e) {} }
+			if(pstmt != null) { try { pstmt.close(); } catch(Exception e) {} }
+			if(conn != null) { try { conn.close(); } catch(Exception e) {} }
+		} // finally
+		
+		System.out.println("selectNotesWithTitle : " + notes.size());
+		return notes;
+	} // selectNotesWithTitle
+	
 	public NoteBean selectNote(int nno) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -450,6 +495,41 @@ public class LogonDBBean {
 		return products;
 	} // selectNoProductsWithId
 	
+	public ProductBean getProduct(int pno) throws Exception {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ProductBean product = null;
+		
+		try {
+			conn = getConnection();
+			String sql = "SELECT * FROM productTbl WHERE pno = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, pno);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				product = new ProductBean();
+				product.setPno(rs.getInt("pno"));
+				product.setPtype(rs.getString("ptype"));
+				product.setPname(rs.getString("pname"));
+				product.setPvalue(rs.getString("pvalue"));
+				product.setPoint(rs.getInt("point"));
+			} // while
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(rs != null) { try { rs.close(); } catch(Exception e) {} }
+			if(pstmt != null) { try { pstmt.close(); } catch(Exception e) {} }
+			if(conn != null) { try { conn.close(); } catch(Exception e) {} }
+		} // finally
+		
+		System.out.println("getProduct : " + product);
+		return product;
+	} // getProduct
+	
 	public void insertOption(String id, int pno, int point) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -520,6 +600,31 @@ public class LogonDBBean {
 		
 	} // insertOption
 	
+	public void updateProduct(ProductBean product) throws Exception {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = getConnection();
+			String sql = "UPDATE productTbl SET ptype = ?, pname = ?, pvalue = ?, point = ? WHERE pno = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, product.getPtype());
+			pstmt.setString(2, product.getPname());
+			pstmt.setString(3, product.getPvalue());
+			pstmt.setInt(4, product.getPoint());
+			pstmt.setInt(5, product.getPno());
+			
+			pstmt.executeUpdate();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(pstmt != null) { try { pstmt.close(); } catch(Exception e) {} }
+			if(conn != null) { try { conn.close(); } catch(Exception e) {} } 
+		} // finally
+		
+	} // updateProduct
+	
 	public void insertSchedule(ScheduleBean schedule) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -560,10 +665,10 @@ public class LogonDBBean {
 			pstmt.setTimestamp(3, schedule.getStartDay());
 			pstmt.setTimestamp(4, schedule.getEndDay());
 			pstmt.setString(5, schedule.getTeam());
-			pstmt.setInt(6, schedule.getSno());
-			pstmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
-			System.out.println("updateSchedule : " + schedule);
+			pstmt.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+			pstmt.setInt(7, schedule.getSno());
 			pstmt.executeUpdate();
+			System.out.println("updateSchedule : " + schedule);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -808,13 +913,14 @@ public class LogonDBBean {
 		
 		try {
 			conn = getConnection();
-			String sql = "SELECT * FROM noteTbl WHERE sno IN (SELECT sno FROM scheduleTbl WHERE team LIKE ?) && (regDate between ? AND ? || updateDate between ? AND ?) ORDER BY regDate DESC";
+			String sql = "SELECT * FROM noteTbl WHERE sno IN (SELECT sno FROM scheduleTbl WHERE id = ? || team LIKE ?) && (regDate between ? AND ? || updateDate between ? AND ?) ORDER BY regDate DESC";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
-			pstmt.setTimestamp(2, login);
-			pstmt.setTimestamp(3, now);
-			pstmt.setTimestamp(4, login);
-			pstmt.setTimestamp(5, now);
+			pstmt.setString(2, "%" + id + "%");
+			pstmt.setTimestamp(3, login);
+			pstmt.setTimestamp(4, now);
+			pstmt.setTimestamp(5, login);
+			pstmt.setTimestamp(6, now);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -856,7 +962,7 @@ public class LogonDBBean {
 			pstmt.setTimestamp(1, login);
 			pstmt.setTimestamp(2, now);
 			pstmt.setString(3, id);
-			pstmt.setString(4, id);
+			pstmt.setString(4, "%" + id + "%");
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -882,5 +988,79 @@ public class LogonDBBean {
 		System.out.println("selectIssuesForDashBoard : " + issues.size());
 		return issues;
 	} // selectIssuesForDashBoard
+	
+	//admin
+	public List<BuyOptionBean> selectBuyOptions() throws Exception {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<BuyOptionBean> buyOptions = new ArrayList<>();
+		
+		try {
+			conn = getConnection();
+			String sql = "SELECT b.id, ptype, pname, point FROM buyTbl b, productTbl p WHERE b.pno = p.pno ORDER BY b.id";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				BuyOptionBean buyOption = new BuyOptionBean();
+				buyOption.setId(rs.getString("id"));
+				buyOption.setPtype(rs.getString("ptype"));
+				buyOption.setPname(rs.getString("pname"));
+				buyOption.setPoint(rs.getInt("point"));
+				
+				buyOptions.add(buyOption);
+			} // while
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(rs != null) { try { rs.close(); } catch(Exception e) {} }
+			if(pstmt != null) { try { pstmt.close(); } catch(Exception e) {} }
+			if(conn != null) { try { conn.close(); } catch(Exception e) {} }
+		} // finally
+		
+		System.out.println("selectBuyOptions : " + buyOptions.size());
+		return buyOptions;
+	}
+	
+	public List<UserBean> getUsers(String id) throws Exception {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<UserBean> users = new ArrayList<>();
+		
+		try {
+			conn = getConnection();
+			String sql = "SELECT * FROM userTbl WHERE id != ? ORDER BY regDate";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				UserBean user = new UserBean();
+				user.setId(rs.getString("id"));
+				user.setName(rs.getString("name"));
+				user.setPoint(rs.getInt("point"));
+				user.setRegDate(rs.getTimestamp("regDate"));
+				user.setEventDate(rs.getTimestamp("eventDate"));
+				user.setLogin(rs.getTimestamp("login"));
+				
+				users.add(user);
+			} // while
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(rs != null) { try { rs.close(); } catch(Exception e) {} }
+			if(pstmt != null) { try { pstmt.close(); } catch(Exception e) {} }
+			if(conn != null) { try { conn.close(); } catch(Exception e) {} }
+		} // finally
+		
+		System.out.println("getUsers : " + users.size());
+		return users;
+	} // getUser
 	
 }

@@ -91,12 +91,13 @@ window.onload = function() {
 	<div class="card">
 		<div class="card-body" style="text-align: center; padding: 50px;">
 			<h4 class="card-text" style="line-height: 50px;">
-				캘린더와 노트를 이용해<br>
-				일정을 관리해보세요!
+				프로젝트 관리, 일정 관리<br>
+				팀원과 캘린더와 노트를 이용해<br>
+				관리해보세요!
 			</h4>
 			<p class="card-text">매일 사용하여 포인트로 유료 옵션도 사용해보세요</p>
 			<c:if test="${empty id}">
-				<button class="btn btn-dark col-3" onclick="join.jsp">지금 가입하기</button>
+				<button class="btn btn-dark col-3" onclick="location.href='join.jsp'">지금 가입하기</button>
 			</c:if>
 		</div>
 	</div>

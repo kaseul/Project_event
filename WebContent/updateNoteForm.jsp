@@ -137,6 +137,16 @@ function submit_div() {
 	        		</div>
 		    	</li>
 		    	<li class="nav-item dropdown">
+		      		<button class="nav-link dropdown-toggle full" data-toggle="dropdown"><i class="fas fa-paint-brush"></i></button>
+		      		<div class="dropdown-menu">
+		      			<c:forEach items="${products}" var="product">
+		      				<c:if test="${product.ptype == 'foreColor'}">
+		      					<button type="button" class="dropdown-item" onclick="document.execCommand('${product.ptype}', false, '${product.pvalue}');">${product.pname}</button>
+		      				</c:if>
+		      			</c:forEach>
+	        		</div>
+		    	</li>
+		    	<li class="nav-item dropdown">
 		      		<button class="nav-link dropdown-toggle full" data-toggle="dropdown"><i class="fas fa-highlighter"></i></button>
 		      		<div class="dropdown-menu">
 		      			<c:forEach items="${products}" var="product">

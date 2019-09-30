@@ -51,15 +51,7 @@ $(document).ready(function(){
 								    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
 								</div>
 								<div class="toast-body">
-								    <c:choose>
-								    	<c:when test="${schedule.regDate > login}">
-								    		새로운 일정이 등록되었습니다!
-								    	</c:when>
-								    	<c:otherwise>
-								    		일정이 수정되었습니다!
-								    	</c:otherwise>
-								    </c:choose>
-								    <br>
+								       일정 내용을 확인해보세요!<br>
 								    <button class="btn btn-light btn-block" onclick="location.href='viewCalendar.jsp'">일정 보기</button>
 								</div>
 							</div>
@@ -79,15 +71,7 @@ $(document).ready(function(){
 								    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
 								</div>
 								<div class="toast-body">
-								    <c:choose>
-								    	<c:when test="${note.regDate > login}">
-								    		새로운 노트가 등록되었습니다!
-								    	</c:when>
-								    	<c:otherwise>
-								    		노트가 수정되었습니다!
-								    	</c:otherwise>
-								    </c:choose>
-								    <br>
+								       노트 내용을 확인해보세요!<br>
 								    <button class="btn btn-light btn-block" onclick="location.href='viewNoteDetail.jsp?nno=${note.nno}'">노트 보기</button>
 								</div>
 							</div>
@@ -108,8 +92,7 @@ $(document).ready(function(){
 									    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
 									</div>
 									<div class="toast-body">
-									    새로운 이슈가 등록되었습니다!
-									    <br>
+									       새로운 이슈가 등록되었습니다!<br>
 									    <button class="btn btn-light btn-block" onclick="location.href='viewNoteDetail.jsp?nno=${issue.nno}'">이슈 보기</button>
 									</div>
 								</div>
